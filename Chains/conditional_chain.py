@@ -1,20 +1,19 @@
-from langchain_groq import ChatGroq
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import PromptTemplate,load_prompt
+from langchain_groq import ChatGroq #     which allows you to use Groq-hosted LLMs inside LangChain.
+from langchain_core.output_parsers import StrOutputParser #     parser converts the model output into a plain Python string.
+from langchain_core.prompts import PromptTemplate,load_prompt #     PromptTemplate helps create reusable prompts with variables.
 
 from dotenv import load_dotenv
-from langchain_core.output_parsers import PydanticOutputParser
-from pydantic import BaseModel, Field
-from typing import Literal
+from langchain_core.output_parsers import PydanticOutputParser #     parser forces the model output into a structured Pydantic schema.
+from pydantic import BaseModel, Field # * BaseModel is used to define structured data models. Field lets you add metadata like descriptions.
+from typing import Literal #     Restricts values to specific allowed choices.
 # Replace your old imports with this:
-from langchain_core.runnables import RunnableParallel, RunnableBranch, RunnableLambda
-
+from langchain_core.runnables import RunnableParallel, RunnableBranch, RunnableLambda 
 load_dotenv()
 model = ChatGroq(model='llama-3.3-70b-versatile')
 
-parser = StrOutputParser()
+parser = StrOutputParser() #     Creates a parser that returns plain text output.
 
-class feedback(BaseModel):
+class feedback(BaseModel): # Creating Structured Output Schema
     sentiment : Literal ['positive', 'negative']  =  Field(description =  'Give the sentiment of the feedback')
 
 
