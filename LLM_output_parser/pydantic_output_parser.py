@@ -15,7 +15,7 @@ llm = HuggingFaceEndpoint(
 model = ChatHuggingFace(llm=llm)
 
 class Person(BaseModel):
-
+    
     name: str = Field(description='Name of the person')
     age: int = Field(gt=18, description='Age of the person')
     city: str = Field(description='Name of the city the person belongs to')
