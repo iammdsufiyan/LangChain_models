@@ -2,7 +2,6 @@ from langchain.retrievers.contextual_compression import ContextualCompressionRet
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
 from langchain_core.documents import Document
-from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq

@@ -1,31 +1,56 @@
-from langchain_groq import ChatGroq
 from dotenv import load_dotenv
-from langchain_core.prompts import PromptTemplate,load_prompt
+
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_groq import ChatGroq
+
+# Load environment variables
 load_dotenv()
 
-
-model = ChatGroq(model='llama-3.3-70b-versatile', temperature= 0.1)
-
-
-
-template1 = PromptTemplate(
- template='Write a detailed report on {topic}',
-    input_variables=['topic']
+# -----------------------------------
+# Google Free Embeddings
+# -----------------------------------
+embeddings = GoogleGenerativeAIEmbeddings(
+    model="models/embedding-001"
 )
 
-templet2 = PromptTemplate(
-
-template='Write a 5 line summary on the following text. /n {text}',
-    input_variables=['text']
+# -----------------------------------
+# Semantic Chunker
+# -----------------------------------
+text_splitter = SemanticChunker(
+    embeddings,
+    breakpoint_threshold_type="standard_deviation",
+    breakpoint_threshold_amount=3
 )
 
-prompt1 = template1.invoke({'topic':'black hole'})
+sample = """
+Farmers were working hard in the fields, preparing the soil and planting seeds for the next season. The sun was bright, and the air smelled of earth and fresh grass.
 
-result1= model.invoke(prompt1)
+The Indian Premier League (IPL) is the biggest cricket league in the world. People all over the world watch the matches and cheer for their favourite teams.
 
+Terrorism is a big danger to peace and safety. It causes harm to people and creates fear in cities and villages. When such attacks happen, they leave behind pain and sadness. To fight terrorism, we need strong laws, alert security forces, and support from people who care about peace and safety.
+"""
 
-prompt2 = templet2.invoke({'text':result1.content})
+# Create semantic chunks
+docs = text_splitter.create_documents([sample])
 
-result2 = model.invoke(prompt2)
+print("\nTotal Chunks:", len(docs))
 
-print(result2.content)
+# for i, doc in enumerate(docs):
+#     print(f"\n========== Chunk {i+1} ==========")
+#     print(doc.page_content)
+
+# # -----------------------------------
+# # Groq LLM
+# # -----------------------------------
+# model = ChatGroq(
+#     model="llama-3.3-70b-versatile",
+#     temperature=0.1
+# )
+
+# response = model.invoke(
+#     "Explain semantic chunking in simple words."
+# )
+
+# print("\n========== GROQ RESPONSE ==========")
+# print(response.content)

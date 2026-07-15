@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-
+from langchain.vectorestores import Chroma
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
